@@ -1,0 +1,136 @@
+---
+import audioUrl from "../assets/music/void angel - Wii Party.mp3";
+---
+
+<header class="site-header">
+    <div class="left">
+        <button id="play-toggle" aria-pressed="false" title="Reproducir / Pausar" class="play-btn">▶</button>
+        <!-- Usamos el asset importado desde src/assets/music -->
+        <audio id="bg-audio" src={audioUrl} preload="none"></audio>
+    </div>
+    <nav class="menu" role="navigation" aria-label="Menú principal">
+        <ul>
+            <li><a href="#about">Sobre mí</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="#skills">Habilidades</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+</header>
+
+<style>
+    :root {
+        --header-bg: #65c0d5;
+        --header-padding: 28px 20px;
+        --link-color: #fff;
+    }
+
+    .site-header {
+        background-color: var(--header-bg);
+        padding: var(--header-padding);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .play-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        border: none;
+        background: rgba(255,255,255,0.12);
+        color: var(--link-color);
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.12s ease, transform 0.08s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .play-btn:active { transform: scale(0.98); }
+
+    .menu ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        gap: 24px;
+    }
+
+    .menu ul li {
+        margin: 0;
+    }
+
+    /* Letras más grandes según tu petición */
+    .menu ul li a {
+        color: var(--link-color);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.15rem; /* aumentado */
+        padding: 6px 8px;
+        display: inline-block;
+    }
+
+    .menu ul li a:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive: menor tamaño en pantallas pequeñas */
+    @media (max-width: 520px) {
+        .site-header { padding: 18px 12px; }
+        .menu ul { gap: 12px; }
+        .menu ul li a { font-size: 1rem; }
+        .play-btn { width: 40px; height: 40px; font-size: 18px; }
+    }
+</style>
+
+<script>
+    // Control simple de play/pause. Asegúrate de tener un archivo en src/assets/music
+        (function () {
+            const btn = document.querySelector('#play-toggle');
+            const audio = document.querySelector('#bg-audio');
+            // Narrow types using instanceof so the checker knows these are the right elements
+            if (!(btn instanceof HTMLButtonElement)) return;
+            if (!(audio instanceof HTMLAudioElement)) return;
+
+            const btnEl = btn;
+            const audioEl = audio;
+
+        function updateButton() {
+            if (audioEl.paused) {
+                btnEl.textContent = '▶';
+                btnEl.setAttribute('aria-pressed', 'false');
+            } else {
+                btnEl.textContent = '❚❚';
+                btnEl.setAttribute('aria-pressed', 'true');
+            }
+        }
+
+        btnEl.addEventListener('click', function () {
+            if (audioEl.paused) {
+                const playPromise = audioEl.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {
+                        // Autoplay may be blocked; user action already happened so usually it's fine
+                    });
+                }
+            } else {
+                audioEl.pause();
+            }
+            updateButton();
+        });
+
+        // Actualiza el botón si el audio acaba o cambia estado
+        audioEl.addEventListener('play', updateButton);
+        audioEl.addEventListener('pause', updateButton);
+        audioEl.addEventListener('ended', function () { audioEl.currentTime = 0; updateButton(); });
+    })();
+</script>

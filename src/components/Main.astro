@@ -1,0 +1,104 @@
+---
+import sea from "../assets/imag/i.gif";
+import avatar from "../assets/imag/e.png";
+import { Image } from 'astro:assets';
+---
+
+<main class="hero">
+	<!-- Imagen superior (mar) -->
+		<div class="sea" style={`background-image: url('${sea.src}')`} role="img" aria-label="Imagen del mar"></div>
+
+	<!-- Barra horizontal con avatar grande a la izquierda centrado verticalmente -->
+	<section class="bar">
+		<div class="avatar-circle" aria-hidden="false">
+			<Image src={avatar} alt="Avatar" width={270} height={270} class="avatar-img" />
+		</div>
+
+		<div class="bar-content">
+			<!-- Aquí puedes añadir título, subtítulo, etc. -->
+			<h1 class="title">Miraly</h1>
+		</div>
+	</section>
+</main>
+
+<style>
+	.hero { width: 100%; }
+
+	/* Imagen superior: ocupa la parte superior completa de la sección hero */
+		.sea {
+			width: 100%;
+			height: 350px; /* aumentado */
+			background-size: cover;
+			background-position: center;
+		}
+
+	/* Barra horizontal debajo de la imagen */
+			.bar {
+				position: relative;
+				width: 100%; /* menos ancha que el 100% original, centrada */
+				margin: 0 auto; /* centrada */
+				height: 70px;
+				background: #65c0d5; /* como estaba inicialmente */
+				display: flex;
+				align-items: center; /* centra verticalmente el contenido de la barra */
+				padding-left: 0; /* espacio para el avatar a la izquierda */
+				box-sizing: border-box;
+				border-bottom: 4px solid #cef6ff;
+			}
+
+	/* Círculo grande situado a la izquierda y centrado verticalmente en la barra */
+		.avatar-circle {
+			position: absolute;
+			left: 60px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 200px; /* aumentado */
+			height: 200px; /* aumentado */
+			border-radius: 999px;
+			background: #67c0d6; /* azul */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 8px;
+			overflow: hidden;
+		}
+
+		.avatar-circle img, .avatar-img {
+			width: 95%;
+			height: 95%;
+			object-fit: cover;
+			border-radius: 999px;
+			display: block;
+		}
+
+			.bar-content {
+				width: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding-left: calc(60px + 270px + 16px); /* espacio para el avatar absoluto */
+				box-sizing: border-box;
+			}
+
+			.title {
+				font-size: 50px;
+				color: #fffffffa;
+				font-weight: 700;
+				margin: 0;
+				text-align: center;
+				word-spacing: 12px;
+			}
+
+			/* Ajuste responsive para que respete el cambio del avatar en pantallas pequeñas */
+			@media (max-width: 640px) {
+				.bar-content { padding-left: calc(12px + 120px + 8px); }
+				.title { font-size: 45px; }
+			}
+
+	/* Ajustes responsive */
+			@media (max-width: 640px) {
+				.sea { height: 180px; }
+				.bar { width: 100%; height: 70px; padding-left: 140px; }
+				.avatar-circle { width: 170px; height: 170px; left: 30px; }
+			}
+</style>
